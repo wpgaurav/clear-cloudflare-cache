@@ -34,7 +34,10 @@ export default function PurgeUrlsCommand() {
       const fetchedZones = await fetchZones();
       setZones(fetchedZones);
     } catch (err) {
-      await showErrorToast("Failed to load zones", err instanceof Error ? err : undefined);
+      await showErrorToast(
+        "Failed to load zones",
+        err instanceof Error ? err : undefined,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -51,8 +54,14 @@ export default function PurgeUrlsCommand() {
   }
 
   return (
-    <List isLoading={isLoading} searchBarPlaceholder="Select a zone to purge URLs from...">
-      <List.Section title="Select Zone" subtitle="Choose the site to purge URLs from">
+    <List
+      isLoading={isLoading}
+      searchBarPlaceholder="Select a zone to purge URLs from..."
+    >
+      <List.Section
+        title="Select Zone"
+        subtitle="Choose the site to purge URLs from"
+      >
         {zones.map((zone) => (
           <List.Item
             key={zone.id}
@@ -63,14 +72,17 @@ export default function PurgeUrlsCommand() {
               {
                 tag: {
                   value: zone.status,
-                  color: zone.status === "active" ? Color.Green : Color.SecondaryText,
+                  color:
+                    zone.status === "active"
+                      ? Color.Green
+                      : Color.SecondaryText,
                 },
               },
             ]}
             actions={
               <ActionPanel>
                 <Action
-                  title="Enter URLs to Purge"
+                  title="Enter Urls to Purge"
                   icon={Icon.List}
                   onAction={() => push(<UrlInputForm zone={zone} />)}
                 />
@@ -122,7 +134,9 @@ function UrlInputForm({ zone }: UrlInputFormProps) {
     }
 
     if (invalidUrls.length > 0) {
-      setUrlError(`Invalid URLs: ${invalidUrls.slice(0, 3).join(", ")}${invalidUrls.length > 3 ? "..." : ""}`);
+      setUrlError(
+        `Invalid URLs: ${invalidUrls.slice(0, 3).join(", ")}${invalidUrls.length > 3 ? "..." : ""}`,
+      );
     } else {
       setUrlError(undefined);
     }
@@ -139,7 +153,9 @@ function UrlInputForm({ zone }: UrlInputFormProps) {
     }
 
     if (validUrls.length > 30) {
-      setUrlError("Maximum 30 URLs per request. Please reduce the number of URLs.");
+      setUrlError(
+        "Maximum 30 URLs per request. Please reduce the number of URLs.",
+      );
       return;
     }
 
@@ -151,7 +167,9 @@ function UrlInputForm({ zone }: UrlInputFormProps) {
     });
 
     if (wrongDomainUrls.length > 0) {
-      setUrlError(`Some URLs don't belong to ${zone.name}: ${wrongDomainUrls[0]}`);
+      setUrlError(
+        `Some URLs don't belong to ${zone.name}: ${wrongDomainUrls[0]}`,
+      );
       return;
     }
 
@@ -165,10 +183,15 @@ function UrlInputForm({ zone }: UrlInputFormProps) {
 
     try {
       await purgeUrls(zone.id, validUrls);
-      await showSuccessToast(`Purged ${validUrls.length} URL(s) from ${zone.name}`);
+      await showSuccessToast(
+        `Purged ${validUrls.length} URL(s) from ${zone.name}`,
+      );
       pop();
     } catch (err) {
-      await showErrorToast("Failed to purge URLs", err instanceof Error ? err : undefined);
+      await showErrorToast(
+        "Failed to purge URLs",
+        err instanceof Error ? err : undefined,
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -180,7 +203,7 @@ function UrlInputForm({ zone }: UrlInputFormProps) {
       actions={
         <ActionPanel>
           <Action.SubmitForm
-            title="Purge URLs"
+            title="Purge Urls"
             icon={{ source: Icon.Trash, tintColor: Color.Red }}
             onSubmit={handleSubmit}
           />

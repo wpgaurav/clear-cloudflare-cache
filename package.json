@@ -3,7 +3,7 @@
   "title": "Cloudflare Cache Purge",
   "description": "Clear Cloudflare cache for entire sites or specific URLs",
   "icon": "extension-icon.png",
-  "author": "gauravtiwari",
+  "author": "gaurav_tiwari",
   "categories": [
     "Developer Tools",
     "Web"

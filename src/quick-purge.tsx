@@ -8,7 +8,6 @@ import {
   showToast,
   Toast,
   popToRoot,
-  getPreferenceValues,
 } from "@raycast/api";
 import { useState, useEffect } from "react";
 import {
@@ -21,11 +20,6 @@ import {
   findZoneByDomain,
   getDefaultZoneId,
 } from "./api";
-
-interface Preferences {
-  apiToken: string;
-  defaultZoneId?: string;
-}
 
 export default function QuickPurgeCommand() {
   const [url, setUrl] = useState("");
@@ -66,7 +60,7 @@ export default function QuickPurgeCommand() {
         const trimmed = clipboardText.trim();
         if (isValidUrl(trimmed)) {
           setUrl(trimmed);
-          
+
           // Try to detect zone from clipboard URL
           const domain = extractDomainFromUrl(trimmed);
           if (domain) {
@@ -79,7 +73,10 @@ export default function QuickPurgeCommand() {
         }
       }
     } catch (err) {
-      await showErrorToast("Failed to initialize", err instanceof Error ? err : undefined);
+      await showErrorToast(
+        "Failed to initialize",
+        err instanceof Error ? err : undefined,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -106,7 +103,9 @@ export default function QuickPurgeCommand() {
       return;
     }
 
-    const zone = zones.find((z) => domain.endsWith(z.name) || domain === z.name);
+    const zone = zones.find(
+      (z) => domain.endsWith(z.name) || domain === z.name,
+    );
     if (zone && zone.id !== selectedZoneId) {
       setDetectedZone(zone);
       setSelectedZoneId(zone.id);
@@ -165,7 +164,10 @@ export default function QuickPurgeCommand() {
       await showSuccessToast(`Purged: ${values.url}`);
       await popToRoot();
     } catch (err) {
-      await showErrorToast("Failed to purge URL", err instanceof Error ? err : undefined);
+      await showErrorToast(
+        "Failed to purge URL",
+        err instanceof Error ? err : undefined,
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -213,7 +215,11 @@ export default function QuickPurgeCommand() {
         title="Zone"
         value={selectedZoneId}
         onChange={setSelectedZoneId}
-        info={detectedZone ? `Auto-detected: ${detectedZone.name}` : "Select the Cloudflare zone for this URL"}
+        info={
+          detectedZone
+            ? `Auto-detected: ${detectedZone.name}`
+            : "Select the Cloudflare zone for this URL"
+        }
       >
         <Form.Dropdown.Item value="" title="Select a zone..." />
         {zones.map((zone) => (

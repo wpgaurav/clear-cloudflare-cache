@@ -10,7 +10,13 @@ import {
   Toast,
 } from "@raycast/api";
 import { useState, useEffect } from "react";
-import { fetchZones, purgeAllCache, Zone, showErrorToast, showSuccessToast } from "./api";
+import {
+  fetchZones,
+  purgeAllCache,
+  Zone,
+  showErrorToast,
+  showSuccessToast,
+} from "./api";
 
 export default function PurgeAllCommand() {
   const [zones, setZones] = useState<Zone[]>([]);
@@ -29,9 +35,13 @@ export default function PurgeAllCommand() {
       const fetchedZones = await fetchZones();
       setZones(fetchedZones);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch zones";
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch zones";
       setError(errorMessage);
-      await showErrorToast("Failed to load zones", err instanceof Error ? err : undefined);
+      await showErrorToast(
+        "Failed to load zones",
+        err instanceof Error ? err : undefined,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +69,10 @@ export default function PurgeAllCommand() {
       await purgeAllCache(zone.id);
       await showSuccessToast(`Cache purged for ${zone.name}`);
     } catch (err) {
-      await showErrorToast("Failed to purge cache", err instanceof Error ? err : undefined);
+      await showErrorToast(
+        "Failed to purge cache",
+        err instanceof Error ? err : undefined,
+      );
     }
   }
 
@@ -82,7 +95,11 @@ export default function PurgeAllCommand() {
           description={error}
           actions={
             <ActionPanel>
-              <Action title="Retry" icon={Icon.ArrowClockwise} onAction={loadZones} />
+              <Action
+                title="Retry"
+                icon={Icon.ArrowClockwise}
+                onAction={loadZones}
+              />
             </ActionPanel>
           }
         />
@@ -103,7 +120,10 @@ export default function PurgeAllCommand() {
               {
                 tag: {
                   value: zone.status,
-                  color: zone.status === "active" ? Color.Green : Color.SecondaryText,
+                  color:
+                    zone.status === "active"
+                      ? Color.Green
+                      : Color.SecondaryText,
                 },
               },
             ]}
@@ -119,7 +139,7 @@ export default function PurgeAllCommand() {
                 </ActionPanel.Section>
                 <ActionPanel.Section>
                   <Action.CopyToClipboard
-                    title="Copy Zone ID"
+                    title="Copy Zone Id"
                     content={zone.id}
                     shortcut={{ modifiers: ["cmd"], key: "c" }}
                   />

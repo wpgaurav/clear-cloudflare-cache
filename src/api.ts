@@ -50,7 +50,8 @@ export async function fetchZones(): Promise<Zone[]> {
       headers: getHeaders(),
     });
 
-    const data = (await response.json()) as CloudflareResponse<Zone[]> & ZonesResult;
+    const data = (await response.json()) as CloudflareResponse<Zone[]> &
+      ZonesResult;
 
     if (!data.success) {
       const errorMsg = data.errors.map((e) => e.message).join(", ");
@@ -86,13 +87,18 @@ export async function purgeAllCache(zoneId: string): Promise<boolean> {
   }
 }
 
-export async function purgeUrls(zoneId: string, urls: string[]): Promise<boolean> {
+export async function purgeUrls(
+  zoneId: string,
+  urls: string[],
+): Promise<boolean> {
   if (urls.length === 0) {
     throw new Error("No URLs provided");
   }
 
   if (urls.length > 30) {
-    throw new Error("Maximum 30 URLs per request. Split into multiple batches.");
+    throw new Error(
+      "Maximum 30 URLs per request. Split into multiple batches.",
+    );
   }
 
   try {
@@ -116,7 +122,10 @@ export async function purgeUrls(zoneId: string, urls: string[]): Promise<boolean
   }
 }
 
-export async function purgeTags(zoneId: string, tags: string[]): Promise<boolean> {
+export async function purgeTags(
+  zoneId: string,
+  tags: string[],
+): Promise<boolean> {
   if (tags.length === 0) {
     throw new Error("No cache tags provided");
   }
@@ -142,7 +151,10 @@ export async function purgeTags(zoneId: string, tags: string[]): Promise<boolean
   }
 }
 
-export async function purgePrefix(zoneId: string, prefixes: string[]): Promise<boolean> {
+export async function purgePrefix(
+  zoneId: string,
+  prefixes: string[],
+): Promise<boolean> {
   if (prefixes.length === 0) {
     throw new Error("No prefixes provided");
   }
@@ -184,7 +196,7 @@ export function extractDomainFromUrl(url: string): string | null {
 
 export async function findZoneByDomain(domain: string): Promise<Zone | null> {
   const zones = await fetchZones();
-  
+
   // Try exact match first
   let zone = zones.find((z) => z.name === domain);
   if (zone) return zone;
